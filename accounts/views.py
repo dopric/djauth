@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import RegisterUserForm
@@ -15,7 +16,7 @@ def login_user(request):
             print("KNOWN USER")
             login(request, user)
             print("USER LOGGED IN, redirect")
-            return redirect('main:index')
+            return redirect('accounts:profile')
         else:
             messages.error(request, ('Invalid credentials'))
 
@@ -38,3 +39,7 @@ def register_user(request):
         form = RegisterUserForm()
 
     return render(request, 'accounts/register.html', {'form': form})
+
+@login_required
+def profile(request):
+    return render(request, 'accounts/profile.html')
